@@ -8,7 +8,7 @@
 #define MAX_DATE_LENGTH 20
 #define INPUT_BUFFER 256
 
-// Product structure
+// PRODUCT STRUCT
 typedef struct {
     int id;
     char name[MAX_NAME_LENGTH];
@@ -17,7 +17,7 @@ typedef struct {
     char expiration[MAX_DATE_LENGTH];
 } Product;
 
-// Global inventory
+// INVENTORY
 static Product inventory[MAX_PRODUCTS];
 static int product_count = 0;
 
@@ -27,7 +27,7 @@ static void clear_input_buffer(void) {
     while ((c = getchar()) != '\n' && c != EOF);
 }
 
-// Get valid integer input
+// FOR THE PRODUCT ID 
 static int get_valid_int(const char* prompt, int min, int max) {
     int value;
     while (1) {
@@ -41,7 +41,7 @@ static int get_valid_int(const char* prompt, int min, int max) {
     }
 }
 
-// Get valid float input
+// 
 static float get_valid_float(const char* prompt, float min) {
     float value;
     while (1) {
@@ -55,7 +55,6 @@ static float get_valid_float(const char* prompt, float min) {
     }
 }
 
-// FIXED STRING INPUT
 static void get_valid_string(const char* prompt, char* buffer, int max_len) {
     printf("%s", prompt);
     
@@ -75,7 +74,7 @@ static void get_valid_string(const char* prompt, char* buffer, int max_len) {
     clear_input_buffer();
 }
 
-// **NEW: Check if name already exists (case-insensitive)**
+// CHECK'S IF THE NAME BEING INPUT IS ALREADY EXISTED 
 static int name_exists(const char* name_to_check) {
     for (int i = 0; i < product_count; i++) {
         if (strcasecmp(inventory[i].name, name_to_check) == 0) {
@@ -85,7 +84,7 @@ static int name_exists(const char* name_to_check) {
     return 0;  // Name doesn't exist
 }
 
-// Get valid expiry date
+// FOR VALID EXPIRY DATE 
 static void get_valid_expiry_date(const char* prompt, char* buffer, int max_len) {
     char temp[INPUT_BUFFER];
     
@@ -123,7 +122,7 @@ static void get_valid_expiry_date(const char* prompt, char* buffer, int max_len)
     }
 }
 
-// Check if ID already exists
+// CHECK IF THE ID ENTERED ALREADY EXIST
 static int id_exists(int id) {
     for (int i = 0; i < product_count; i++) {
         if (inventory[i].id == id) return 1;
@@ -138,7 +137,7 @@ static int find_product(int id) {
     return -1;
 }
 
-// **UPDATED: Add product with NAME validation**
+// ADD PRODUCT
 static void add_product(void) {
     if (product_count >= MAX_PRODUCTS) {
         printf("\n? Inventory FULL!\n");
@@ -158,7 +157,6 @@ static void add_product(void) {
 
     inventory[product_count].id = id;
     
-    // **NEW: NAME validation (case-insensitive)**
     char temp_name[MAX_NAME_LENGTH];
     do {
         get_valid_string("Product Name: ", temp_name, MAX_NAME_LENGTH);
@@ -171,7 +169,7 @@ static void add_product(void) {
         }
     } while (1);
     
-    // Price & Quantity
+    // PRICE & QUANTITY
     inventory[product_count].price = get_valid_float("Unit Price ($): ", 0.01);
     inventory[product_count].quantity = get_valid_int("Quantity: ", 0, 99999);
     get_valid_expiry_date("Expiry (MM/DD/YYYY): ", inventory[product_count].expiration, MAX_DATE_LENGTH);
@@ -180,7 +178,7 @@ static void add_product(void) {
     printf("\n? '%s' (ID:%d) ADDED SUCCESSFULLY!\n", inventory[product_count-1].name, id);
 }
 
-// View products
+// VIEW PRODUCT
 static void view_products(void) {
     if (product_count == 0) {
         printf("\n? No products!\n");
@@ -203,7 +201,7 @@ static void view_products(void) {
     printf("-------------------------------------------------------------\n");
 }
 
-// Update product
+// UPDATE PRODUCT
 static void update_product(void) {
     if (product_count == 0) {
         printf("\n? No products!\n");
@@ -237,10 +235,10 @@ static void update_product(void) {
     printf("\n? UPDATED!\n");
 }
 
-// Delete product
+// DELETE PRODUCT
 static void delete_product(void) {
     if (product_count == 0) {
-        printf("\n? No products!\n");
+        printf("\nNo products!\n");
         return;
     }
 
@@ -249,7 +247,7 @@ static void delete_product(void) {
     int index = find_product(id);
 
     if (index == -1) {
-        printf("? ID %d NOT FOUND!\n", id);
+        printf(" ID %d NOT FOUND!\n", id);
         return;
     }
 
@@ -259,13 +257,13 @@ static void delete_product(void) {
             inventory[i] = inventory[i + 1];
         }
         product_count--;
-        printf("\n? DELETED!\n");
+        printf("\nDELETED!\n");
     } else {
-        printf("\n? CANCELLED!\n");
+        printf("\nCANCELLED!\n");
     }
 }
 
-// Search product
+// SEARCH PRODUCT
 static void search_product(void) {
     if (product_count == 0) {
         printf("\n? No products!\n");
@@ -287,19 +285,19 @@ static void search_product(void) {
            inventory[index].quantity, inventory[index].expiration);
 }
 
-// Menu
+// MAYAMART MENU
 static int show_menu(void) {
-    printf("\n+--------------------------------------+\n");
-    printf("|      MAYAMART INVENTORY SYSTEM       |\n");
-    printf("| 1.Add  2.View  3.Search  4.Update    |\n");
-    printf("| 5.Delete     6.Exit                 |\n");
-    printf("+--------------------------------------+\n");
+    printf("\n+-----------------------------------------------+\n");
+    printf("|      MAYAMART INVENTORY MANAGEMENT SYSTEM       |\n");
+    printf("| 1.Add  2.View          3.Search  4.Update       |\n");
+    printf("|             5.Delete     6.Exit                 |\n");
+    printf("+-------------------------------------------------+\n");
     printf("Enter choice: ");
     return get_valid_int("", 1, 6);
 }
 
 int main(void) {
-    printf("?? MAYAMART Inventory System Started!\n\n");
+    printf(" MAYAMART Inventory Management System Started!\n\n");
     
     int choice;
     do {
@@ -310,7 +308,7 @@ int main(void) {
             case 3: search_product(); break;
             case 4: update_product(); break;
             case 5: delete_product(); break;
-            case 6: printf("\n Thank you for using MAYAMART!\n"); break;
+            case 6: printf("\n Thank you for using MAYAMART Inventory Management System !\n"); break;
         }
         if (choice != 6) {
             printf("\n[Press Enter to continue] ");
